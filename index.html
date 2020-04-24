@@ -1,0 +1,184 @@
+<!DOCTYPE HTML>
+<HTML>
+	<HEAD>
+		<meta charset="UTF-8">
+		<TITLE>DemoDice</TITLE>	
+	</HEAD>
+	<BODY>
+		<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)">
+			Bet
+			<input id="my_rate" size="4">
+			<input type="button" onclick="doDice48()" value="Roll < 48">
+			<input type="button" onclick="doDice52()" value="Roll > 52">
+		</div>
+		<SCRIPT>
+			var contract_address = "0xab88C94D21431feAab8CE42e945B60436eAaF21b";
+			var contract_abi = [
+				{
+					"constant": false,
+					"inputs": [
+						{
+							"internalType": "bytes32",
+							"name": "myid",
+							"type": "bytes32"
+						},
+						{
+							"internalType": "string",
+							"name": "result",
+							"type": "string"
+						}
+					],
+					"name": "__callback",
+					"outputs": [],
+					"payable": false,
+					"stateMutability": "nonpayable",
+					"type": "function"
+				},
+				{
+					"constant": false,
+					"inputs": [
+						{
+							"internalType": "bytes32",
+							"name": "_myid",
+							"type": "bytes32"
+						},
+						{
+							"internalType": "string",
+							"name": "_result",
+							"type": "string"
+						},
+						{
+							"internalType": "bytes",
+							"name": "_proof",
+							"type": "bytes"
+						}
+					],
+					"name": "__callback",
+					"outputs": [],
+					"payable": false,
+					"stateMutability": "nonpayable",
+					"type": "function"
+				},
+				{
+					"constant": true,
+					"inputs": [
+						{
+							"internalType": "bytes32",
+							"name": "",
+							"type": "bytes32"
+						}
+					],
+					"name": "bet",
+					"outputs": [
+						{
+							"internalType": "uint256",
+							"name": "",
+							"type": "uint256"
+						}
+					],
+					"payable": false,
+					"stateMutability": "view",
+					"type": "function"
+				},
+				{
+					"constant": false,
+					"inputs": [
+						{
+							"internalType": "bool",
+							"name": "_less",
+							"type": "bool"
+						}
+					],
+					"name": "doDice",
+					"outputs": [],
+					"payable": true,
+					"stateMutability": "payable",
+					"type": "function"
+				},
+				{
+					"constant": true,
+					"inputs": [
+						{
+							"internalType": "bytes32",
+							"name": "",
+							"type": "bytes32"
+						}
+					],
+					"name": "less",
+					"outputs": [
+						{
+							"internalType": "bool",
+							"name": "",
+							"type": "bool"
+						}
+					],
+					"payable": false,
+					"stateMutability": "view",
+					"type": "function"
+				},
+				{
+					"constant": true,
+					"inputs": [
+						{
+							"internalType": "bytes32",
+							"name": "",
+							"type": "bytes32"
+						}
+					],
+					"name": "num",
+					"outputs": [
+						{
+							"internalType": "uint256",
+							"name": "",
+							"type": "uint256"
+						}
+					],
+					"payable": false,
+					"stateMutability": "view",
+					"type": "function"
+				},
+				{
+					"constant": true,
+					"inputs": [
+						{
+							"internalType": "bytes32",
+							"name": "",
+							"type": "bytes32"
+						}
+					],
+					"name": "sender",
+					"outputs": [
+						{
+							"internalType": "address payable",
+							"name": "",
+							"type": "address"
+						}
+					],
+					"payable": false,
+					"stateMutability": "view",
+					"type": "function"
+				}
+			];
+			var contract;
+			var metamask_exists = false;
+			MetamaskCheck();
+
+			function doDice48() {
+				contract.doDice( true, {from: web3.eth.accounts[0], value: (document.getElementById('my_rate').value*1000000000000000000) }, function(err, res){});
+			};
+
+			function doDice52() {
+				contract.doDice( false, {from: web3.eth.accounts[0], value: (document.getElementById('my_rate').value*1000000000000000000) }, function(err, res){});
+			};
+
+			function MetamaskCheck(){
+				if (typeof web3 !== "undefined") {
+					window.web3 = new Web3(web3.currentProvider);
+					contract = web3.eth.contract(contract_abi).at(contract_address);
+					ethereum.enable();
+					document.getElementById('my_rate').value = "0.01";
+				} else { alert("Need MetaMask!"); }
+			}
+		</SCRIPT>
+	</BODY>
+</HTML>
